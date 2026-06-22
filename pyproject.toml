@@ -1,0 +1,29 @@
+[project]
+name = "pokemon-stats-mcp"
+version = "0.1.0"
+description = "This project contains code to create MCP server for Pokemon stats data."
+readme = "README.md"
+authors = [
+    { name = "Abhishek Patre", email = "abhishekpatre31@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "duckdb>=1.5.4",
+    "mcp>=1.28.0",
+    "dbt-core>=1.8.0",
+    "dbt-duckdb>=1.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel",
+    "notebook",
+]
+
+[project.scripts]
+pokemon-stats-mcp = "pokemon_stats_mcp:main"
+
+
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
