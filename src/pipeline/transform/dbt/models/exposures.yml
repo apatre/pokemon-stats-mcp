@@ -1,0 +1,67 @@
+version: 2
+
+exposures:
+  - name: location_pokemon_encounters_exposure
+    label: Location Pokemon Encounters Exposure
+    type: application
+    maturity: high
+    owner:
+      name: Abhishek Patre
+      email: abhishekpatre31@gmail.com
+    description: >
+      Curated model detailing pokemon encounters by location, including rates and combat stats.
+      [Side Note: This table depends on specific game VERSIONS (e.g. 'firered' or 'leafgreen') because encounter chances and version-exclusive pokemon differ between versions.]
+    depends_on:
+      - ref('location_pokemon_encounters')
+
+  - name: pokemon_evolutions_exposure
+    label: Pokemon Evolutions Exposure
+    type: application
+    maturity: high
+    owner:
+      name: Abhishek Patre
+      email: abhishekpatre31@gmail.com
+    description: >
+      Curated model documenting evolution chains, triggers, levels, and conditions.
+      [Side Note: This table depends on VERSION-GROUPS (e.g. 'firered-leafgreen') as evolution mechanics remain identical across all versions of the same game release.]
+    depends_on:
+      - ref('pokemon_evolutions')
+
+  - name: pokemon_moves_exposure
+    label: Pokemon Moves Exposure
+    type: application
+    maturity: high
+    owner:
+      name: Abhishek Patre
+      email: abhishekpatre31@gmail.com
+    description: >
+      Curated model mapping pokemon move-learning methods and levels.
+      [Side Note: This table depends on VERSION-GROUPS (e.g. 'firered-leafgreen') because move learnsets are defined and shared at the version group release level in PokéAPI.]
+    depends_on:
+      - ref('pokemon_moves')
+
+  - name: pokemon_defense_profile_exposure
+    label: Pokemon Defense Profile Exposure
+    type: application
+    maturity: high
+    owner:
+      name: Abhishek Patre
+      email: abhishekpatre31@gmail.com
+    description: >
+      Curated model pivoting defensive weaknesses, resistances, and immunities for each pokemon.
+      [Side Note: This table is GLOBALLY STATIC and version-independent (defense profiles are computed based on static type effectiveness relations).]
+    depends_on:
+      - ref('pokemon_defense_profile')
+
+  - name: pokemon_game_stats_and_moves_exposure
+    label: Pokemon Game Stats and Moves Exposure
+    type: application
+    maturity: high
+    owner:
+      name: Abhishek Patre
+      email: abhishekpatre31@gmail.com
+    description: >
+      Curated model combining pokemon stats, types, and complete game-specific move sets.
+      [Side Note: This table depends on VERSION-GROUPS (e.g. 'firered-leafgreen') to filter and comply with the specific move sets a game version group can have.]
+    depends_on:
+      - ref('pokemon_game_stats_and_moves')

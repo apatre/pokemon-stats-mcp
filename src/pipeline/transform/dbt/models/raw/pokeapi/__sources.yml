@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: staging
+    schema: staging
+    tables:
+      - name: version_group
+      - name: version
+      - name: region
+      - name: location
+      - name: location_area
+      - name: move_learn_method
+      - name: pokedex
+      - name: pokemon_species
+      - name: pokemon
+      - name: evolution_chain
+      - name: type

@@ -1,0 +1,203 @@
+version: 2
+
+models:
+  - name: pokemon_evolutions
+    description: "Curated view of Pokemon species evolution chains, detailing next evolutions, trigger methods, requirements, and summaries."
+    columns:
+      - name: pokemon_species_name
+        data_type: VARCHAR
+        description: "The name of the base species."
+      - name: evolves_from_species
+        data_type: VARCHAR
+        description: "The name of the species this species evolves from."
+      - name: next_evolution_species
+        data_type: VARCHAR
+        description: "The name of the species evolved into next."
+      - name: trigger_method
+        data_type: VARCHAR
+        description: "The trigger method (e.g., level-up, trade, use-item)."
+      - name: min_level
+        data_type: INTEGER
+        description: "The minimum level required for evolution."
+      - name: location_required
+        data_type: VARCHAR
+        description: "The location required for evolution."
+      - name: trade_pokemon_required
+        data_type: VARCHAR
+        description: "The specific Pokemon variety name required in trade."
+      - name: time_required
+        data_type: VARCHAR
+        description: "The time of day required for evolution."
+      - name: affection_required
+        data_type: VARCHAR
+        description: "The minimum friendship/affection level required."
+      - name: steps_required
+        data_type: VARCHAR
+        description: "The minimum steps required to evolve."
+      - name: evolution_summary
+        data_type: VARCHAR
+        description: "A human-readable text summarizing this specific evolution step."
+
+  - name: pokemon_moves
+    description: "Curated list of moves learned by Pokemon, mapped to game versions and learn methods."
+    columns:
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The version group name."
+      - name: version_name
+        data_type: VARCHAR
+        description: "The name of the specific version."
+      - name: move_learn_method
+        data_type: VARCHAR
+        description: "How the move is learned (e.g., machine, level-up)."
+      - name: level_learned_at
+        data_type: INTEGER
+        description: "The level at which the move is learned."
+      - name: move_name
+        data_type: VARCHAR
+        description: "The name of the move."
+
+  - name: pokemon_type_weaknesses
+    description: "Ephemeral model computing damage effectiveness factors for each Pokemon variety against attacking types."
+    columns:
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: attacking_type
+        data_type: VARCHAR
+        description: "The attacking type name."
+      - name: total_effectiveness
+        data_type: DOUBLE
+        description: "The total damage effectiveness factor (combinations of type resistances/weaknesses)."
+
+  - name: location_pokemon_encounters
+    description: "Curated model showing Pokemon encounters in specific locations, including levels, rates, and base stats of the Pokemon."
+    columns:
+      - name: version_name
+        data_type: VARCHAR
+        description: "The game version."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The version group name."
+      - name: location_name
+        data_type: VARCHAR
+        description: "The location name."
+      - name: location_area_name
+        data_type: VARCHAR
+        description: "The specific location area name."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the encountered Pokemon."
+      - name: pokemon_types
+        data_type: VARCHAR
+        description: "Slash-separated types of the encountered Pokemon."
+      - name: encounter_method
+        data_type: VARCHAR
+        description: "The method of encounter (e.g., walk, surf)."
+      - name: min_level
+        data_type: INTEGER
+        description: "Minimum level of the Pokemon encountered."
+      - name: max_level
+        data_type: INTEGER
+        description: "Maximum level of the Pokemon encountered."
+      - name: base_encounter_rate
+        data_type: INTEGER
+        description: "Base/max chance rate for the version."
+      - name: method_encounter_rate
+        data_type: INTEGER
+        description: "Chance rate for this specific encounter method."
+      - name: condition_values
+        data_type: VARCHAR
+        description: "Conditions for the encounter (e.g., time of day)."
+      - name: stat_hp
+        data_type: INTEGER
+        description: "Base HP stat of the Pokemon."
+      - name: stat_attack
+        data_type: INTEGER
+        description: "Base Attack stat of the Pokemon."
+      - name: stat_defense
+        data_type: INTEGER
+        description: "Base Defense stat of the Pokemon."
+      - name: stat_sp_attack
+        data_type: INTEGER
+        description: "Base Special Attack stat."
+      - name: stat_sp_defense
+        data_type: INTEGER
+        description: "Base Special Defense stat."
+      - name: stat_speed
+        data_type: INTEGER
+        description: "Base Speed stat."
+
+  - name: pokemon_defense_profile
+    description: "Curated defense profile of Pokemon, categorizing attacking types by weaknesses, resistances, and immunities."
+    columns:
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: pokemon_types
+        data_type: VARCHAR
+        description: "Slash-separated types of the Pokemon."
+      - name: quad_weaknesses
+        data_type: VARCHAR
+        description: "Comma-separated attacking types that deal 4x damage."
+      - name: double_weaknesses
+        data_type: VARCHAR
+        description: "Comma-separated attacking types that deal 2x damage."
+      - name: resistances
+        data_type: VARCHAR
+        description: "Comma-separated attacking types that deal 0.5x damage."
+      - name: quad_resistances
+        data_type: VARCHAR
+        description: "Comma-separated attacking types that deal 0.25x damage."
+      - name: immunities
+        data_type: VARCHAR
+        description: "Comma-separated attacking types that deal 0x damage."
+
+  - name: pokemon_game_stats_and_moves
+    description: "Combined curated model mapping Pokemon varieties to their base stats and movesets in specific game versions."
+    columns:
+      - name: pokemon_id
+        data_type: INTEGER
+        description: "Primary key of the Pokemon variety."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon variety."
+      - name: types
+        data_type: VARCHAR
+        description: "Slash-separated types of the Pokemon variety."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The version group name."
+      - name: version_name
+        data_type: VARCHAR
+        description: "The version name."
+      - name: move_name
+        data_type: VARCHAR
+        description: "The move name."
+      - name: move_learn_method
+        data_type: VARCHAR
+        description: "The move learn method."
+      - name: level_learned_at
+        data_type: INTEGER
+        description: "The level learned at."
+      - name: stat_hp
+        data_type: INTEGER
+        description: "Base HP stat."
+      - name: stat_attack
+        data_type: INTEGER
+        description: "Base Attack stat."
+      - name: stat_defense
+        data_type: INTEGER
+        description: "Base Defense stat."
+      - name: stat_sp_attack
+        data_type: INTEGER
+        description: "Base Special Attack stat."
+      - name: stat_sp_defense
+        data_type: INTEGER
+        description: "Base Special Defense stat."
+      - name: stat_speed
+        data_type: INTEGER
+        description: "Base Speed stat."

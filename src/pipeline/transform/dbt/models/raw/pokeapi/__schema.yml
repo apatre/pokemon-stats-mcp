@@ -1,0 +1,415 @@
+version: 2
+
+models:
+  - name: versions
+    description: "Raw Game Version details from PokéAPI."
+    columns:
+      - name: version_id
+        data_type: INTEGER
+        description: "Primary key for the version."
+      - name: version_name
+        data_type: VARCHAR
+        description: "The name of the version (e.g., red, blue)."
+      - name: version_group_id
+        data_type: INTEGER
+        description: "Foreign key referencing the associated version group."
+
+  - name: version_groups
+    description: "Raw Game Version Group details from PokéAPI."
+    columns:
+      - name: version_group_id
+        data_type: INTEGER
+        description: "Primary key for the version group."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The name of the version group (e.g., red-blue)."
+      - name: generation_name
+        data_type: VARCHAR
+        description: "The name of the generation this version group belongs to."
+
+  - name: version_groups__region
+    description: "Bridge table linking version groups to their regions."
+    columns:
+      - name: sur_version_group_region_name
+        data_type: VARCHAR
+        description: "Surrogate primary key hash of version_group_name and region_name."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The name of the version group."
+      - name: region_name
+        data_type: VARCHAR
+        description: "The name of the region."
+
+  - name: region
+    description: "Raw Region details from PokéAPI."
+    columns:
+      - name: region_id
+        data_type: INTEGER
+        description: "Primary key for the region."
+      - name: region_name
+        data_type: VARCHAR
+        description: "The name of the region."
+      - name: main_generation
+        data_type: VARCHAR
+        description: "The main generation associated with this region."
+
+  - name: location
+    description: "Raw Location and location area details from PokéAPI."
+    columns:
+      - name: sur_location_area_name
+        data_type: VARCHAR
+        description: "Surrogate primary key hash of location_id and location_area_name."
+      - name: location_id
+        data_type: INTEGER
+        description: "The primary key for the location."
+      - name: location_name
+        data_type: VARCHAR
+        description: "The name of the location."
+      - name: region_name
+        data_type: VARCHAR
+        description: "The name of the region this location belongs to."
+      - name: location_area_name
+        data_type: VARCHAR
+        description: "The specific sub-area name within the location."
+
+  - name: location_area__encounter_methods_rate
+    description: "Encounter methods and their rates per version in location areas."
+    columns:
+      - name: sur_location_area_encounter_method_rate
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: location_area_id
+        data_type: INTEGER
+        description: "The ID of the location area."
+      - name: location_area_name
+        data_type: VARCHAR
+        description: "The name of the location area."
+      - name: encounter_method
+        data_type: VARCHAR
+        description: "The method of encountering (e.g., walk, surf)."
+      - name: version_name
+        data_type: VARCHAR
+        description: "The game version name."
+      - name: encounter_rate
+        data_type: INTEGER
+        description: "The encounter rate value."
+
+  - name: location_area__pokemon_encounters_rates
+    description: "Detailed Pokemon encounter rates, levels, and conditions in location areas."
+    columns:
+      - name: sur_location_area_pokemon_encounter_rate
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: location_area_id
+        data_type: INTEGER
+        description: "The ID of the location area."
+      - name: encounter_method
+        data_type: VARCHAR
+        description: "The encounter method."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: location_area_name
+        data_type: VARCHAR
+        description: "The name of the location area."
+      - name: version_name
+        data_type: VARCHAR
+        description: "The game version name."
+      - name: max_chance_per_version_name
+        data_type: INTEGER
+        description: "The maximum chance of encountering this Pokemon in this version."
+      - name: min_level
+        data_type: INTEGER
+        description: "The minimum level of the encountered Pokemon."
+      - name: max_level
+        data_type: INTEGER
+        description: "The maximum level of the encountered Pokemon."
+      - name: condition_values
+        data_type: VARCHAR
+        description: "Comma-separated list of encounter condition values (e.g., time of day)."
+      - name: chance_per_encounter_method
+        data_type: INTEGER
+        description: "The specific chance of this encounter."
+
+  - name: move_learn_methods
+    description: "Move learn methods details from PokéAPI."
+    columns:
+      - name: move_learn_method_id
+        data_type: INTEGER
+        description: "Primary key for the move learn method."
+      - name: move_learn_method_name
+        data_type: VARCHAR
+        description: "The name of the move learn method (e.g., level-up, machine)."
+
+  - name: version_groups__move_learn_methods
+    description: "Bridge table linking version groups to their supported move learn methods."
+    columns:
+      - name: sur_version_group_move_learn_method
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The name of the version group."
+      - name: move_learn_method
+        data_type: VARCHAR
+        description: "The move learn method name."
+
+  - name: pokedex
+    description: "Raw PokéDex details from PokéAPI."
+    columns:
+      - name: pokedex_id
+        data_type: INTEGER
+        description: "Primary key for the Pokedex."
+      - name: pokedex_name
+        data_type: VARCHAR
+        description: "The name of the Pokedex."
+      - name: is_main_series
+        data_type: BOOLEAN
+        description: "Whether this Pokedex belongs to the main series games."
+      - name: region_id
+        data_type: INTEGER
+        description: "The associated region ID."
+      - name: version_group_names
+        data_type: VARCHAR
+        description: "JSON array of version group names associated with this Pokedex."
+
+  - name: version_groups__pokedex
+    description: "Bridge table linking version groups to their Pokedexes."
+    columns:
+      - name: sur_version_group_pokedex_name
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The version group name."
+      - name: pokedex_name
+        data_type: VARCHAR
+        description: "The Pokedex name."
+
+  - name: pokedex__pokemon_species
+    description: "Bridge table linking Pokedexes to the Pokemon species entries."
+    columns:
+      - name: sur_pokedex_pokemon_species
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: pokedex_name
+        data_type: VARCHAR
+        description: "The name of the Pokedex."
+      - name: pokemon_species_entry_id
+        data_type: INTEGER
+        description: "The entry number of the species in this specific Pokedex."
+      - name: pokemon_species_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon species."
+
+  - name: pokemon_species
+    description: "Raw Pokemon Species details from PokéAPI."
+    columns:
+      - name: pokemon_species_id
+        data_type: INTEGER
+        description: "Primary key for the Pokemon species."
+      - name: pokemon_species_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon species."
+      - name: species_order
+        data_type: INTEGER
+        description: "Order number of the species in the biological catalogue."
+      - name: gender_rate
+        data_type: INTEGER
+        description: "Rate of gender distribution (-1 if genderless, otherwise female ratio out of 8)."
+      - name: capture_rate
+        data_type: INTEGER
+        description: "Base capture rate (up to 255)."
+      - name: base_happiness
+        data_type: INTEGER
+        description: "Base happiness level of the species."
+      - name: is_baby
+        data_type: BOOLEAN
+        description: "Whether the species is a baby Pokemon."
+      - name: is_legendary
+        data_type: BOOLEAN
+        description: "Whether the species is a legendary Pokemon."
+      - name: is_mythical
+        data_type: BOOLEAN
+        description: "Whether the species is a mythical Pokemon."
+      - name: hatch_counter
+        data_type: INTEGER
+        description: "Base steps/cycles needed to hatch an egg of this species."
+      - name: has_gender_differences
+        data_type: BOOLEAN
+        description: "Whether the species has gender-specific forms."
+      - name: forms_switchable
+        data_type: BOOLEAN
+        description: "Whether different forms of this species can be switched dynamically."
+      - name: growth_rate
+        data_type: VARCHAR
+        description: "Growth rate category (e.g., medium, fast)."
+      - name: evolves_from_species
+        data_type: VARCHAR
+        description: "The name of the species this species evolves from."
+      - name: evolution_chain_id
+        data_type: INTEGER
+        description: "ID of the associated evolution chain."
+      - name: generation_name
+        data_type: VARCHAR
+        description: "Generation name this species was introduced in."
+
+  - name: pokemon_species__evolutions_chain
+    description: "Unnested evolution chain details including conditions."
+    columns:
+      - name: sur_evolution_chain_pokemon_species
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: evolution_chain_id
+        data_type: INTEGER
+        description: "The evolution chain ID."
+      - name: pokemon_species_name
+        data_type: VARCHAR
+        description: "The name of the base species."
+      - name: evolves_to_species_name
+        data_type: VARCHAR
+        description: "The name of the species evolved into."
+      - name: evolution_details_trigger_name
+        data_type: VARCHAR
+        description: "The trigger method of evolution (e.g., level-up, trade, use-item)."
+      - name: evolution_details_gender
+        data_type: VARCHAR
+        description: "Gender required for this evolution."
+      - name: evolution_details_location
+        data_type: VARCHAR
+        description: "Location required for this evolution."
+      - name: evolution_details_min_level
+        data_type: VARCHAR
+        description: "Minimum level required."
+      - name: evolution_details_min_affection
+        data_type: VARCHAR
+        description: "Minimum affection/friendship level required."
+      - name: evolution_detail_time_of_the_day
+        data_type: VARCHAR
+        description: "Time of day required (e.g., day, night)."
+      - name: evolution_detail_trade_species
+        data_type: VARCHAR
+        description: "Pokemon species required to be traded with."
+      - name: evolution_detail_region
+        data_type: VARCHAR
+        description: "Region required."
+      - name: evolution_detail_min_move_count
+        data_type: VARCHAR
+        description: "Minimum move count required."
+      - name: evolution_detail_min_damage_taken
+        data_type: VARCHAR
+        description: "Minimum damage taken required."
+      - name: evolution_detail_min_steps
+        data_type: VARCHAR
+        description: "Minimum steps required."
+
+  - name: pokemon_species__pokemon
+    description: "Bridge table linking Pokemon species to their specific varieties."
+    columns:
+      - name: sur_pokemon_species_id_pokemon_id
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: pokemon_species_id
+        data_type: INTEGER
+        description: "The species ID."
+      - name: pokemon_id
+        data_type: INTEGER
+        description: "The Pokemon variety ID."
+
+  - name: pokemon
+    description: "Raw Pokemon Variety details from PokéAPI."
+    columns:
+      - name: pokemon_id
+        data_type: INTEGER
+        description: "Primary key for the Pokemon variety."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon variety."
+      - name: base_experience
+        data_type: INTEGER
+        description: "Base experience earned when defeating this Pokemon variety."
+      - name: is_default
+        data_type: BOOLEAN
+        description: "Whether this is the default variety for the species."
+      - name: height
+        data_type: INTEGER
+        description: "The height of the Pokemon in decimeters."
+      - name: weight
+        data_type: INTEGER
+        description: "The weight of the Pokemon in hectograms."
+      - name: pokemon_species_name
+        data_type: VARCHAR
+        description: "The name of the associated Pokemon species."
+
+  - name: pokemon__stats
+    description: "Base stats (HP, Attack, Speed, etc.) per Pokemon variety."
+    columns:
+      - name: sur_pokemon_stats_id
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: stat_name
+        data_type: VARCHAR
+        description: "The name of the stat (e.g., hp, speed)."
+      - name: base_stat
+        data_type: INTEGER
+        description: "The base value of the stat."
+      - name: effort
+        data_type: INTEGER
+        description: "The effort value yield (EV) for this stat."
+
+  - name: pokemon__type
+    description: "Types assigned to each Pokemon variety."
+    columns:
+      - name: sur_pokemon_type_id
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: slot
+        data_type: INTEGER
+        description: "Type slot (1 for primary, 2 for secondary)."
+      - name: type_name
+        data_type: VARCHAR
+        description: "The type name."
+
+  - name: pokemon__move
+    description: "Moves learned by Pokemon varieties across versions and methods."
+    columns:
+      - name: sur_pokemon_move_id
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: pokemon_name
+        data_type: VARCHAR
+        description: "The name of the Pokemon."
+      - name: move_name
+        data_type: VARCHAR
+        description: "The name of the move."
+      - name: version_group_name
+        data_type: VARCHAR
+        description: "The version group name."
+      - name: move_learn_method
+        data_type: VARCHAR
+        description: "The method of learning (e.g., level-up, machine)."
+      - name: level_learned_at
+        data_type: INTEGER
+        description: "The level at which the move is learned (0 if not learned via level-up)."
+
+  - name: type
+    description: "Type matchup and damage effectiveness multipliers."
+    columns:
+      - name: sur_type_relation_id
+        data_type: VARCHAR
+        description: "Surrogate primary key hash."
+      - name: damage_type
+        data_type: VARCHAR
+        description: "The attacking type."
+      - name: target_type
+        data_type: VARCHAR
+        description: "The defending type."
+      - name: damage_factor
+        data_type: DOUBLE
+        description: "The damage effectiveness multiplier (e.g., 2.0, 0.5, 0.0)."

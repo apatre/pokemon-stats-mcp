@@ -2,11 +2,11 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'pokemon_stats_dbt'
+name: 'pokemon_dbt'
 version: '1.0.0'
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'pokemon_stats_dbt'
+profile: 'pokemon_dbt'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -30,7 +30,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  pokemon_stats_dbt:
-    # Config indicated by + and applies to all files under models/example/
-    example:
+  pokemon_dbt:
+    +materialized: table
+    raw:
+      +schema: raw
+      pokeapi:
+        # PokéAPI raw ingest models
+    curated:
+      +schema: curated
       +materialized: view
+      pokemon_type_weaknesses:
+        +materialized: ephemeral
